@@ -5,7 +5,7 @@ import cors from 'cors';
 
 const PORT = process.env.PORT || 3000;
 
-const dbStr = require('../db.ts').default;
+const dbStr = 'mongodb+srv://test:197346285qwer@cluster.20cyk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster'
 
 const app = express();
 app.use(express.json());
