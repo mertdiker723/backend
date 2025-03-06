@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import router from './routes';
 import cors from 'cors';
 
+const PORT = process.env.PORT || 3000;
+
 const dbStr = require('../db.ts').default;
 
 const app = express();
@@ -24,6 +26,6 @@ mongoose.connect(MONGO_URL, {
 app.use("/", router)
 
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 })
