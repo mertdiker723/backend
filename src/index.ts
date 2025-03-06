@@ -1,11 +1,15 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import router from './routes';
+import cors from 'cors';
+
 const dbStr = require('../db.ts').default;
 
 const app = express();
 app.use(express.json());
 
+// CORS allows all urls
+app.use(cors());
 
 const MONGO_URL = dbStr;
 
