@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteTask = exports.updateTask = exports.createTask = exports.getTask = exports.getOwnTask = exports.getAllTask = void 0;
+exports.deleteTask = exports.updateTask = exports.createTask = exports.getTask = exports.getAllTask = void 0;
 // Schema
 const taskSchema_1 = __importDefault(require("../schema/taskSchema"));
 // Lib
@@ -29,19 +29,6 @@ const getAllTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getAllTask = getAllTask;
-const getOwnTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const decoded = yield (0, tokenVerify_1.tokenAccess)(req, res);
-        if (!decoded)
-            return;
-        const tasks = yield taskSchema_1.default.find({ userId: decoded === null || decoded === void 0 ? void 0 : decoded.id });
-        return res.status(200).json({ data: tasks });
-    }
-    catch (error) {
-        return res.sendStatus(400);
-    }
-});
-exports.getOwnTask = getOwnTask;
 const getTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const decoded = yield (0, tokenVerify_1.tokenAccess)(req, res);
@@ -49,6 +36,9 @@ const getTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return;
         const { id } = req.params || {};
         const task = yield taskSchema_1.default.findById(id);
+        if (decoded === null || decoded === void 0 ? void 0 : decoded.isAdmin) {
+            return res.status(200).json({ data: task });
+        }
         if ((task === null || task === void 0 ? void 0 : task.userId) !== (decoded === null || decoded === void 0 ? void 0 : decoded.id)) {
             return res.status(401).json({ message: "Unauthorized access!!" });
         }

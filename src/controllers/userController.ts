@@ -8,11 +8,11 @@ import { tokenCreation } from "../lib/tokenCreation";
 
 export const createUser = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { userName, email, password } = req.body || {};
-
+        const { userName, email, password, isAdmin } = req.body || {};
+        
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = new User({ userName, email, password: hashedPassword, isAdmin: false });
+        const user = new User({ userName, email, password: hashedPassword, isAdmin });
         await user.save();
 
         const token = tokenCreation(user);

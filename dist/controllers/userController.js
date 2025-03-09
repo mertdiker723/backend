@@ -18,9 +18,9 @@ const userSchema_1 = __importDefault(require("../schema/userSchema"));
 const tokenCreation_1 = require("../lib/tokenCreation");
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { userName, email, password } = req.body || {};
+        const { userName, email, password, isAdmin } = req.body || {};
         const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
-        const user = new userSchema_1.default({ userName, email, password: hashedPassword, isAdmin: false });
+        const user = new userSchema_1.default({ userName, email, password: hashedPassword, isAdmin });
         yield user.save();
         const token = (0, tokenCreation_1.tokenCreation)(user);
         return res.status(201).json({ message: 'user created!', token, data: user });

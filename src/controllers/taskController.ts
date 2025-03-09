@@ -18,18 +18,6 @@ export const getAllTask = async (req: Request, res: Response): Promise<any> => {
     }
 }
 
-export const getOwnTask = async (req: Request, res: Response): Promise<any> => {
-    try {
-        const decoded = await tokenAccess(req, res);
-        if (!decoded) return;
-        const tasks = await Task.find({ userId: decoded?.id });
-
-        return res.status(200).json({ data: tasks });
-    } catch (error) {
-        return res.sendStatus(400);
-    }
-}
-
 export const getTask = async (req: Request, res: Response): Promise<any> => {
     try {
         const decoded = await tokenAccess(req, res);
@@ -38,6 +26,9 @@ export const getTask = async (req: Request, res: Response): Promise<any> => {
         const { id } = req.params || {};
 
         const task = await Task.findById(id);
+        if (decoded?.isAdmin) {
+            return res.status(200).json({ data: task });
+        }
 
         if (task?.userId !== decoded?.id) {
             return res.status(401).json({ message: "Unauthorized access!!" });

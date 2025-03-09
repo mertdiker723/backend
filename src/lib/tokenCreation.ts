@@ -4,7 +4,7 @@ import IUser from "../model/userModel";
 
 export const tokenCreation = (user: IUser) => {
     const token = jwt.sign(
-        { id: user._id, email: user.email },
+        { id: user._id, email: user.email, isAdmin: user.isAdmin },
         process.env.JWT_SECRET as string,
         { expiresIn: "1d" }
     );
