@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTask = exports.updateTask = exports.createTask = exports.getTask = exports.getAllTask = void 0;
-const schema_1 = __importDefault(require("../schema"));
+const taskSchema_1 = __importDefault(require("../schema/taskSchema"));
 const getAllTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const tasks = yield schema_1.default.find();
+        const tasks = yield taskSchema_1.default.find();
         res.setHeader('Content-Type', 'application/json');
         return res.status(200).json({ data: tasks });
     }
@@ -28,7 +28,7 @@ exports.getAllTask = getAllTask;
 const getTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params || {};
-        const task = yield schema_1.default.findById(id);
+        const task = yield taskSchema_1.default.findById(id);
         res.setHeader('Content-Type', 'application/json');
         return res.status(200).json({ data: task });
     }
@@ -40,7 +40,7 @@ exports.getTask = getTask;
 const createTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { title, description, status } = req.body || {};
-        const task = new schema_1.default({ title, description, status });
+        const task = new taskSchema_1.default({ title, description, status });
         yield task.save();
         res.setHeader('Content-Type', 'application/json');
         return res.status(201).json({ message: 'created task!', data: task });
@@ -54,7 +54,7 @@ const updateTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const { id } = req.params || {};
         const { title, description, status } = req.body || {};
-        const task = yield schema_1.default.findByIdAndUpdate(id, { title, description, status }, { new: true });
+        const task = yield taskSchema_1.default.findByIdAndUpdate(id, { title, description, status }, { new: true });
         res.setHeader('Content-Type', 'application/json');
         return res.status(200).json({ message: 'updated task!', data: task });
     }
@@ -66,8 +66,8 @@ exports.updateTask = updateTask;
 const deleteTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params || {};
-        yield schema_1.default.findByIdAndDelete(id);
-        return res.status(200).json({ message: 'deleted task!' });
+        const data = yield taskSchema_1.default.findByIdAndDelete(id);
+        return res.status(200).json({ message: 'deleted task!', task: data });
     }
     catch (error) {
         return res.sendStatus(400);

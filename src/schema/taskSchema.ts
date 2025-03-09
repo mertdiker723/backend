@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import ITask from "../model";
+import ITask from "../model/taskModel";
 
 const taskSchema = new mongoose.Schema({
     title: {
@@ -11,7 +11,7 @@ const taskSchema = new mongoose.Schema({
         required: false
     },
     status: {
-        type: String,
+        type: Boolean,
         required: true
     },
 }, {

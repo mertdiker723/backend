@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import Task from "../schema"
+import Task from "../schema/taskSchema"
 
 
 
@@ -52,8 +52,8 @@ export const updateTask = async (req: Request, res: Response): Promise<any> => {
 export const deleteTask = async (req: Request, res: Response): Promise<any> => {
     try {
         const { id } = req.params || {};
-        await Task.findByIdAndDelete(id);
-        return res.status(200).json({ message: 'deleted task!' });
+        const data = await Task.findByIdAndDelete(id);
+        return res.status(200).json({ message: 'deleted task!', task: data });
     } catch (error) {
         return res.sendStatus(400);
     }
