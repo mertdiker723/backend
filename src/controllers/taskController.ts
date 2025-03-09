@@ -50,7 +50,7 @@ export const createTask = async (req: Request, res: Response): Promise<any> => {
         const task = new Task({ title, description, status, userId: decoded?.id });
         await task.save();
 
-        return res.status(201).json({ message: 'created task!', task });
+        return res.status(201).json({ message: 'created task!', data: task });
     } catch (error) {
         return res.sendStatus(400);
     }
@@ -77,8 +77,8 @@ export const deleteTask = async (req: Request, res: Response): Promise<any> => {
         if (!decoded) return;
 
         const { id } = req.params || {};
-        const data = await Task.findByIdAndDelete(id);
-        return res.status(200).json({ message: 'deleted task!', task: data });
+        const task = await Task.findByIdAndDelete(id);
+        return res.status(200).json({ message: 'deleted task!', data: task });
     } catch (error) {
         return res.sendStatus(400);
     }
