@@ -17,7 +17,7 @@ export const createUser = async (req: Request, res: Response): Promise<any> => {
 
         const token = tokenCreation(user);
 
-        return res.status(201).json({ message: 'user created!', token, data: user });
+        return res.status(201).json({ message: 'user created!', token, user });
     } catch (error: unknown) {
         if ((error as any)?.code === 11000) {
             return res.status(400).json({ message: 'Email already in use' });
@@ -44,7 +44,7 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
 
         const token = tokenCreation(user);
 
-        return res.status(200).json({ message: 'Logged in!', token, data: user });
+        return res.status(200).json({ message: 'Logged in!', token, user });
     } catch (error) {
         return res.status(400).json({ message: 'Error logging in' });
     }

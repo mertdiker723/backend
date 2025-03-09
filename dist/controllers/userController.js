@@ -23,7 +23,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const user = new userSchema_1.default({ userName, email, password: hashedPassword, isAdmin });
         yield user.save();
         const token = (0, tokenCreation_1.tokenCreation)(user);
-        return res.status(201).json({ message: 'user created!', token, data: user });
+        return res.status(201).json({ message: 'user created!', token, user });
     }
     catch (error) {
         if ((error === null || error === void 0 ? void 0 : error.code) === 11000) {
@@ -47,7 +47,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return res.status(400).json({ message: 'Invalid password' });
         }
         const token = (0, tokenCreation_1.tokenCreation)(user);
-        return res.status(200).json({ message: 'Logged in!', token, data: user });
+        return res.status(200).json({ message: 'Logged in!', token, user });
     }
     catch (error) {
         return res.status(400).json({ message: 'Error logging in' });

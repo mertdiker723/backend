@@ -57,7 +57,7 @@ const createTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { title, description, status } = req.body || {};
         const task = new taskSchema_1.default({ title, description, status, userId: decoded === null || decoded === void 0 ? void 0 : decoded.id });
         yield task.save();
-        return res.status(201).json({ message: 'created task!', data: task });
+        return res.status(201).json({ message: 'created task!', task });
     }
     catch (error) {
         return res.sendStatus(400);

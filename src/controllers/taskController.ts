@@ -50,7 +50,7 @@ export const createTask = async (req: Request, res: Response): Promise<any> => {
         const task = new Task({ title, description, status, userId: decoded?.id });
         await task.save();
 
-        return res.status(201).json({ message: 'created task!', data: task });
+        return res.status(201).json({ message: 'created task!', task });
     } catch (error) {
         return res.sendStatus(400);
     }
