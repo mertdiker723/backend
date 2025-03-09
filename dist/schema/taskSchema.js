@@ -17,6 +17,10 @@ const taskSchema = new mongoose_1.default.Schema({
         type: Boolean,
         required: true
     },
+    userId: {
+        type: String,
+        required: true
+    }
 }, {
     timestamps: true
 });

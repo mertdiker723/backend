@@ -1,10 +1,8 @@
 import { Request, Response } from "express"
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 
 import User from "../schema/userSchema"
-
-
+import { tokenCreation } from "../lib/tokenCreation";
 
 
 
@@ -16,8 +14,10 @@ export const createUser = async (req: Request, res: Response): Promise<any> => {
 
         const user = new User({ userName, email, password: hashedPassword, isAdmin: false });
         await user.save();
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(201).json({ message: 'user created!', data: user });
+
+        const token = tokenCreation(user);
+
+        return res.status(201).json({ message: 'user created!', token, data: user });
     } catch (error: unknown) {
         if ((error as any)?.code === 11000) {
             return res.status(400).json({ message: 'Email already in use' });
@@ -42,14 +42,8 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
             return res.status(400).json({ message: 'Invalid password' });
         }
 
-        // JWT token
-        const token = jwt.sign(
-            { id: user._id, email: user.email },
-            process.env.JWT_SECRET as string,
-            { expiresIn: "1d" }
-        );
+        const token = tokenCreation(user);
 
-        res.setHeader('Content-Type', 'application/json');
         return res.status(200).json({ message: 'Logged in!', token, data: user });
     } catch (error) {
         return res.status(400).json({ message: 'Error logging in' });

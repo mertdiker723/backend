@@ -14,16 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginUser = exports.createUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userSchema_1 = __importDefault(require("../schema/userSchema"));
+const tokenCreation_1 = require("../lib/tokenCreation");
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userName, email, password } = req.body || {};
         const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
         const user = new userSchema_1.default({ userName, email, password: hashedPassword, isAdmin: false });
         yield user.save();
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(201).json({ message: 'user created!', data: user });
+        const token = (0, tokenCreation_1.tokenCreation)(user);
+        return res.status(201).json({ message: 'user created!', token, data: user });
     }
     catch (error) {
         if ((error === null || error === void 0 ? void 0 : error.code) === 11000) {
@@ -46,9 +46,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!isPasswordValid) {
             return res.status(400).json({ message: 'Invalid password' });
         }
-        // JWT token
-        const token = jsonwebtoken_1.default.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1d" });
-        res.setHeader('Content-Type', 'application/json');
+        const token = (0, tokenCreation_1.tokenCreation)(user);
         return res.status(200).json({ message: 'Logged in!', token, data: user });
     }
     catch (error) {

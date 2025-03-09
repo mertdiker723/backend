@@ -8,7 +8,8 @@ const taskController_1 = require("../controllers/taskController");
 const userController_1 = require("../controllers/userController");
 const router = express_1.default.Router();
 // tasks
-router.get('/api/task', taskController_1.getAllTask);
+router.get('/api/alltask', taskController_1.getAllTask);
+router.get('/api/task', taskController_1.getOwnTask);
 router.get('/api/task/:id', taskController_1.getTask);
 router.post('/api/task', taskController_1.createTask);
 router.put('/api/task/:id', taskController_1.updateTask);
