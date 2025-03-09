@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = void 0;
+exports.loginUser = exports.createUser = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userSchema_1 = __importDefault(require("../schema/userSchema"));
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -32,4 +33,27 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.createUser = createUser;
+const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, password } = req.body || {};
+        const user = yield userSchema_1.default.findOne({
+            email
+        });
+        if (!user) {
+            return res.status(400).json({ message: 'User not found' });
+        }
+        const isPasswordValid = yield bcryptjs_1.default.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: 'Invalid password' });
+        }
+        // JWT token
+        const token = jsonwebtoken_1.default.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "1d" });
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(200).json({ message: 'Logged in!', token, data: user });
+    }
+    catch (error) {
+        return res.status(400).json({ message: 'Error logging in' });
+    }
+});
+exports.loginUser = loginUser;
 //# sourceMappingURL=userController.js.map

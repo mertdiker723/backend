@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 import User from "../schema/userSchema"
 
@@ -29,8 +30,7 @@ export const createUser = async (req: Request, res: Response): Promise<any> => {
 export const loginUser = async (req: Request, res: Response): Promise<any> => {
     try {
         const { email, password } = req.body || {};
-        console.log(req.body);
-        
+
         const user = await User.findOne({
             email
         });
@@ -41,8 +41,16 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
         if (!isPasswordValid) {
             return res.status(400).json({ message: 'Invalid password' });
         }
+
+        // JWT token
+        const token = jwt.sign(
+            { id: user._id, email: user.email },
+            process.env.JWT_SECRET as string,
+            { expiresIn: "1d" }
+        );
+
         res.setHeader('Content-Type', 'application/json');
-        return res.status(200).json({ message: 'Logged in!', data: user });
+        return res.status(200).json({ message: 'Logged in!', token, data: user });
     } catch (error) {
         return res.status(400).json({ message: 'Error logging in' });
     }

@@ -14,6 +14,7 @@ router.post('/api/task', taskController_1.createTask);
 router.put('/api/task/:id', taskController_1.updateTask);
 router.delete('/api/task/:id', taskController_1.deleteTask);
 // users
-router.post('/api/user', userController_1.createUser);
+router.post('/api/user/register', userController_1.createUser);
+router.post('/api/user/login', userController_1.loginUser);
 exports.default = router;
 //# sourceMappingURL=index.js.map

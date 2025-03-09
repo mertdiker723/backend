@@ -7,13 +7,14 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const routes_1 = __importDefault(require("./routes"));
 const cors_1 = __importDefault(require("cors"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const PORT = process.env.PORT || 3000;
-const dbStr = 'mongodb+srv://test:197346285qwer@cluster.20cyk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster';
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 // CORS allows all urls
 app.use((0, cors_1.default)());
-const MONGO_URL = dbStr;
+const MONGO_URL = process.env.MONGO_URI;
 mongoose_1.default.connect(MONGO_URL, {
     dbName: 'twa'
 }).then(() => {
