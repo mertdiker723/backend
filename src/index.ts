@@ -2,10 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import router from './routes';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
-const dbStr = 'mongodb+srv://test:197346285qwer@cluster.20cyk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster'
 
 const app = express();
 app.use(express.json());
@@ -13,7 +15,7 @@ app.use(express.json());
 // CORS allows all urls
 app.use(cors());
 
-const MONGO_URL = dbStr;
+const MONGO_URL = process.env.MONGO_URI as string;
 
 mongoose.connect(MONGO_URL, {
     dbName: 'twa'

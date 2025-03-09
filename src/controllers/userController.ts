@@ -24,3 +24,26 @@ export const createUser = async (req: Request, res: Response): Promise<any> => {
         return res.status(400).json({ message: 'Error creating user' });
     }
 }
+
+
+export const loginUser = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { email, password } = req.body || {};
+        console.log(req.body);
+        
+        const user = await User.findOne({
+            email
+        });
+        if (!user) {
+            return res.status(400).json({ message: 'User not found' });
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: 'Invalid password' });
+        }
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(200).json({ message: 'Logged in!', data: user });
+    } catch (error) {
+        return res.status(400).json({ message: 'Error logging in' });
+    }
+}

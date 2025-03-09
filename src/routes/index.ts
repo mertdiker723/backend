@@ -1,6 +1,6 @@
 import express from 'express';
 import { createTask, getAllTask, deleteTask, getTask, updateTask } from '../controllers/taskController';
-import { createUser } from '../controllers/userController';
+import { createUser, loginUser } from '../controllers/userController';
 
 const router = express.Router();
 
@@ -12,6 +12,7 @@ router.put('/api/task/:id', updateTask);
 router.delete('/api/task/:id', deleteTask);
 
 // users
-router.post('/api/user', createUser);
+router.post('/api/user/register', createUser);
+router.post('/api/user/login', loginUser);
 
 export default router;
