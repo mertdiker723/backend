@@ -12,8 +12,12 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 
-// CORS allows all urls
-app.use(cors({ origin: '*' }));
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"], 
+    credentials: true
+}));
 
 const MONGO_URL = process.env.MONGO_URI as string;
 
