@@ -1,1 +1,2 @@
-1-) 'npm run start' diyerek ayağa kaldırlır proje.
+# download modules by "npm install"
+# run the project by "npm run start"
